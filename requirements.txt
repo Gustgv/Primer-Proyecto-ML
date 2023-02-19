@@ -1,4 +1,3 @@
 surprise
 pandas
 sklearn
-numpy
