@@ -37,15 +37,18 @@ def recommendation(usuario, movie):
     recomendaciones_usuario = recomendaciones_usuario.reset_index()
 
     # Recomendamos
-    recomendaciones_usuario['estimate_score'] = recomendaciones_usuario['id'].apply(model.predict(usuario, movie).est)
+    recomendaciones_usuario['estimate_score'] = recomendaciones_usuario['id'].apply(lambda x: model.predict(usuario, x).est)
 
-    recomendado = recomendaciones_usuario.loc[(recomendaciones_usuario['estimate_score'] >= 4).sort_values(ascending= False)]
+    recomendado = recomendaciones_usuario.loc[(recomendaciones_usuario['estimate_score'] >= 3.4).sort_values(ascending= False)]
     nombre_pelicula = recomendado['title'][recomendado['id'] == movie].iloc[0]
 
-    if recomendaciones_usuario[recomendaciones_usuario.id == movie].iloc[0,0] == movie:
-        print(f'La pelicula "{nombre_pelicula}" esta recomendada para el usuario "{usuario}"')
-    else:
-        print(f'La pelicula "{nombre_pelicula}" NO esta recomendada para el usuario "{usuario}"')
+    try:
+        if recomendaciones_usuario[recomendaciones_usuario.id == movie].iloc[0,0] == movie:
+            print(f'La pelicula "{nombre_pelicula}" esta recomendada para el usuario "{usuario}"')
+        else:
+            print(f'La pelicula "{nombre_pelicula}" NO esta recomendada para el usuario "{usuario}"')
+    except IndexError:
+        return 'La pelicula no se encuentra en la base de datos'
 
 # Configuro la app
 st.title('¿Le recomendamos la pelicula?')
