@@ -60,7 +60,7 @@ st.header('Por favor ingrese nro de usuario e id de la pelicula:')
 user = st.number_input('Id de Usuario (Maximo 124380):', min_value=1, max_value=124380, value=1)
 
 peli = st.text_input('Escriba Id de la pelicula, Ej: ns405, ds693, as288, hs789')
-st.write('El titulo de la pelicula es', print(title[title.index == peli].iloc[0,0]))
+st.write('El titulo de la pelicula es', peli)
 
 
 if st.button('Recomendar'):
