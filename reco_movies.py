@@ -9,7 +9,7 @@ import streamlit as st
 model = pickle.load(open('pred_movies.json', 'rb'))
 
 # Cargando tabla
-df = pd.load_parquet('rating_data.parquet')
+df = pd.load_parquet('https://github.com/Gustgv/Recomendacion-de-peliculas/blob/master/rating_data.parquet?raw=true')
 
 # creo df de ratings
 rating = df[['userid', 'score', 'id']]
