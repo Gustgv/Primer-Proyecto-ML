@@ -8,24 +8,23 @@ import streamlit as st
 #Cargando Modelo
 model = pickle.load(open('pred_movies.json', 'rb'))
 
-# Cargando tabla
-df = pd.read_parquet('https://github.com/Gustgv/Recomendacion-de-peliculas/blob/master/rating_data.parquet?raw=true')
-
-# creo df de ratings
-rating = df[['userid', 'score', 'id']]
-
-# Creo df de titulos con su respectivo id
-title = df[['id', 'title']].drop_duplicates()
-title = title.set_index('title')
-title = title.sort_index()
-
 #Caching del modelo para cargar mas rapido
 @st.cache
 
 # Definimos el sistema de recomendaciones
 
 def recommendation(usuario, movie):
+    # Cargando tabla
+    df = pd.read_parquet('https://github.com/Gustgv/Recomendacion-de-peliculas/blob/master/rating_data.parquet?raw=true')
 
+    # creo df de ratings
+    rating = df[['userid', 'score', 'id']]
+
+    # Creo df de titulos con su respectivo id
+    title = df[['id', 'title']].drop_duplicates()
+    title = title.set_index('title')
+    title = title.sort_index()
+    
     # Listado de todas las peliculas del registro
     recomendaciones_usuario = title.iloc[:22998].copy()
 
