@@ -2,3 +2,4 @@ surprise
 pandas
 sklearn
 pickle
+numpy
