@@ -11,7 +11,7 @@ rating = pd.read_parquet('https://github.com/Gustgv/Primer-Proyecto-ML/blob/mast
 svd = pickle.load(open('reco_movie.json', 'rb'))
 
 #Caching del modelo para cargar mas rapido
-@st.cache
+@st.cache_resource
 
 # Definimos el sistema de recomendaciones
 
