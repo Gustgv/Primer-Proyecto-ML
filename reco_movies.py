@@ -55,5 +55,5 @@ st.write('Puntuacion esperada:', scoring)
 
 
 if st.button('Recomendar'):
-    recom = recommendation(user, movie, scoring)
+    recom = 'a la verga soy marico'
     st.write(recom)
