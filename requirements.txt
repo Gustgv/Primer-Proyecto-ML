@@ -1,5 +1,4 @@
 pandas
 surprise
-
 streamlit
-pickle > 0
+pickle
