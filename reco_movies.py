@@ -6,7 +6,7 @@ import streamlit as st
 
 
 #Cargando Modelo
-svd = pickle.load(open('reco_movies.json', 'rb'))
+svd = pickle.load(open('reco_movie.json', 'rb'))
 
 #Caching del modelo para cargar mas rapido
 @st.cache
