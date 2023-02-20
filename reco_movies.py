@@ -34,9 +34,8 @@ def recommendation(user, movie, scoring):
     recomendado = f'La pelicula "{title[title.id == movie].iloc[0,1]}" esta recomendada para el usuario "{user}" se estima una calificacion de "{round(all_movie.iloc[0,2], 2)}"'
     no_recomendado = f'La pelicula "{title[title.id == movie].iloc[0,1]}" No esta recomendada para el usuario "{user}"'
     
-    if movie in recom_movie['id']:    
+    if movie in recom_movie['id'][recom_movie['id'] == movie].iloc[0]:    
         return recomendado
-
     else:
         return no_recomendado
 
