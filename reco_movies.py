@@ -15,9 +15,7 @@ svd = pickle.load(open('reco_movie.json', 'rb'))
 
 # Definimos el sistema de recomendaciones
 
-
 def recommendation(user, movie, scoring):
-
     all_movie = rating[['id', 'title']].drop_duplicates().set_index('id').iloc[:22998].copy()
     
     movie_saw = rating[rating['userid'] == user]
@@ -30,13 +28,13 @@ def recommendation(user, movie, scoring):
 
     title = rating[['id', 'title']].drop_duplicates().iloc[:22998]
 
-    recomendado = f'La pelicula "{title[title.id == movie].iloc[0,1]}" esta recomendada para el usuario "{user}" se estima una calificacion de "{round(all_movie.iloc[0,2], 2)}"'
-    no_recomendado = f'La pelicula "{title[title.id == movie].iloc[0,1]}" No esta recomendada para el usuario "{user}"'
-    
-    if movie in recom_movie['id'][recom_movie['id'] == movie].iloc[0]:    
-        return recomendado
+    recomendada = f'La pelicula "{title[title.id == movie].iloc[0,1]}" esta recomendada para el usuario "{user}" se estima una calificacion de "{round(all_movie.iloc[0,2], 2)}"'
+    no_recomendada = f'La pelicula "{title[title.id == movie].iloc[0,1]}" No esta recomendada para el usuario "{user}" si estimas una calificacion de {scoring}'
+   
+    if movie in recom_movie['id'].to_list(): 
+        return recomendada
     else:
-        return no_recomendado
+        return no_recomendada
 
  
 # Configuro la app
@@ -49,7 +47,7 @@ st.header('Por favor ingrese nro de usuario e id de la pelicula:')
 user = st.number_input('Id de Usuario (Maximo 124380):', min_value=1, max_value=124380, value=1)
 
 movie = st.text_input('Escriba Id de la pelicula, Ej: ns405, ds693, as288, hs789')
-st.write('Ha elegido el codigo', movie)
+st.write('Ha elegido la pelicula', rating[['title']][rating['id'] == movie].iloc[0,0])
 
 scoring = st.slider('Especifique la calificacion esperada', 1, 5, 3)
 st.write('Puntuacion esperada:', scoring)
