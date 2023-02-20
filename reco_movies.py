@@ -6,7 +6,7 @@ import streamlit as st
 
 # Cargando dataset
 rating = pd.read_parquet('https://github.com/Gustgv/Primer-Proyecto-ML/blob/master/deploy_data.parquet?raw=true')
-title = rating[['id', 'title']].drop_duplicates().iloc[:22998]
+title = rating[['id', 'title']].drop_duplicates().iloc[:22998].set_index('id')
 
 #Cargando Modelo
 svd = pickle.load(open('reco_movie.json', 'rb'))
@@ -46,7 +46,7 @@ st.header('Por favor ingrese nro de usuario e id de la pelicula:')
 user = st.number_input('Id de Usuario (Maximo 124380):', min_value=1, max_value=124380, value=1)
 
 movie = st.text_input('Escriba Id de la pelicula, Ej: ns405, ds693, as288, hs789')
-titulo = title[title['id'] == movie].iloc[0,1]
+titulo = title.title[movie]
 st.write('Ha elegido la pelicula', titulo)
 
 scoring = st.slider('Especifique la calificacion esperada', 1, 5, 3)
