@@ -31,11 +31,14 @@ def recommendation(user, movie, scoring):
 
     title = rating[['id', 'title']].drop_duplicates().iloc[:22998]
 
+    recomendado = f'La pelicula "{title[title.id == movie].iloc[0,1]}" esta recomendada para el usuario "{user}" se estima una calificacion de "{round(all_movie.iloc[0,2], 2)}"'
+    no_recomendado = f'La pelicula "{title[title.id == movie].iloc[0,1]}" No esta recomendada para el usuario "{user}"'
+    
     if movie in recom_movie['id']:    
-        print(f'La pelicula "{title[title.id == movie].iloc[0,1]}" esta recomendada para el usuario "{user}" se estima una calificacion de "{round(all_movie.iloc[0,2], 2)}"')
+        return recomendado
 
     else:
-        print(f'La pelicula "{title[title.id == movie].iloc[0,1]}" No esta recomendada para el usuario "{user}"')
+        return no_recomendado
 
  
 # Configuro la app
@@ -55,5 +58,5 @@ st.write('Puntuacion esperada:', scoring)
 
 
 if st.button('Recomendar'):
-    recom = 'a la verga soy marico'
+    recom = recommendation(user, movie, scoring)
     st.write(recom)
