@@ -1,5 +1,4 @@
 pandas
-surprise
+surprise==1.1.3
 collections
 pickle
-scikit-surprise
