@@ -6,47 +6,38 @@ import streamlit as st
 
 
 #Cargando Modelo
-model = pickle.load(open('pred_movies.json', 'rb'))
-
-# Cargando tabla
-
-df = pd.read_parquet('rating_data.parquet')
-
-# creo df de ratings
-rating = df[['userid', 'score', 'id']]
-
-# Creo df de titulos con su respectivo id
-title = df[['id', 'title']].drop_duplicates()
-title = title.set_index('title')
-title = title.sort_index()
+svd = pickle.load(open('reco_movies.json', 'rb'))
 
 #Caching del modelo para cargar mas rapido
 @st.cache
 
 # Definimos el sistema de recomendaciones
 
-def recommendation(usuario, movie):
 
-    # Listado de todas las peliculas del registro
-    recomendaciones_usuario = title.iloc[:22998].copy()
+def recommendation(user, movie, scoring):
 
-    # Extraigo las películas que ya ha visto
-    usuario_vistas = rating[rating['userid'] == usuario]
+    # Cargando tabla
+    rating = pd.read_parquet('https://github.com/Gustgv/Recomendacion-de-peliculas/blob/master/rating_data.parquet?raw=true')
 
-    recomendaciones_usuario.drop(usuario_vistas.id, inplace = True)
-    recomendaciones_usuario = recomendaciones_usuario.reset_index()
+    all_movie = rating[['id', 'title']].drop_duplicates().set_index('id').iloc[:22998].copy()
+    
+    movie_saw = rating[rating['userid'] == user]
 
-    # Recomendamos
-    recomendaciones_usuario['estimate_score'] = recomendaciones_usuario['id'].apply(model.predict(usuario, movie).est)
+    all_movie.drop(movie_saw.id, inplace= True)
+    all_movie = all_movie.reset_index()
+    all_movie['Estimate_Score'] = all_movie['id'].apply(lambda x: svd.predict(user, x).est)
 
-    recomendado = recomendaciones_usuario.loc[(recomendaciones_usuario['estimate_score'] >= 4).sort_values(ascending= False)]
-    nombre_pelicula = recomendado['title'][recomendado['id'] == movie].iloc[0]
+    recom_movie = all_movie.loc[all_movie['Estimate_Score'] >= scoring]
 
-    if recomendaciones_usuario[recomendaciones_usuario.id == movie].iloc[0,0] == movie:
-        print(f'La pelicula "{nombre_pelicula}" esta recomendada para el usuario "{usuario}"')
+    title = rating[['id', 'title']].drop_duplicates().iloc[:22998]
+
+    if movie in recom_movie['id']:    
+        print(f'La pelicula "{title[title.id == movie].iloc[0,1]}" esta recomendada para el usuario "{user}" se estima una calificacion de "{round(all_movie.iloc[0,2], 2)}"')
+
     else:
-        print(f'La pelicula "{nombre_pelicula}" NO esta recomendada para el usuario "{usuario}"')
+        print(f'La pelicula "{title[title.id == movie].iloc[0,1]}" No esta recomendada para el usuario "{user}"')
 
+ 
 # Configuro la app
 st.title('¿Le recomendamos la pelicula?')
 st.image("""https://nbcpalmsprings.com/wp-content/uploads/sites/8/2021/12/BEST-MOVIES-OF-2021.jpeg""")
@@ -56,9 +47,12 @@ st.header('Por favor ingrese nro de usuario e id de la pelicula:')
 
 user = st.number_input('Id de Usuario (Maximo 124380):', min_value=1, max_value=124380, value=1)
 
-peli = st.text_input('Escriba Id de la pelicula, Ej: ns405, ds693, as288, hs789')
-st.write('El titulo de la pelicula es', print(title[title.index == peli].iloc[0,0]))
+movie = st.text_input('Escriba Id de la pelicula, Ej: ns405, ds693, as288, hs789')
+st.write('El titulo de la pelicula es', movie)
+
+scoring = st.slider('Especifique la calificacion esperada', 1, 5, 1)
+st.write('Puntuacion esperada:', scoring)
 
 
 if st.button('Recomendar'):
-    st.success(recommendation(user, peli))
+    st.success(recommendation(user, movie, scoring))
