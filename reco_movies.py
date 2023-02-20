@@ -6,7 +6,6 @@ import streamlit as st
 
 # Cargando dataset
 rating = pd.read_parquet('https://github.com/Gustgv/Primer-Proyecto-ML/blob/master/deploy_data.parquet?raw=true')
-title = rating[['id', 'title']].drop_duplicates().iloc[:22998].set_index('id')
 
 #Cargando Modelo
 svd = pickle.load(open('reco_movie.json', 'rb'))
@@ -26,6 +25,8 @@ def recommendation(user, movie, scoring):
     all_movie['Estimate_Score'] = all_movie['id'].apply(lambda x: svd.predict(user, x).est)
 
     recom_movie = all_movie.loc[all_movie['Estimate_Score'] >= scoring]
+    
+    title = rating[['id', 'title']].drop_duplicates().iloc[:22998]
 
     recomendada = f'La pelicula "{title[title.id == movie].iloc[0,1]}" esta recomendada para el usuario "{user}" se estima una calificacion de "{round(all_movie.iloc[0,2], 2)}"'
     no_recomendada = f'La pelicula "{title[title.id == movie].iloc[0,1]}" No esta recomendada para el usuario "{user}" si estimas una calificacion de {scoring}'
@@ -46,8 +47,8 @@ st.header('Por favor ingrese nro de usuario e id de la pelicula:')
 user = st.number_input('Id de Usuario (Maximo 124380):', min_value=1, max_value=124380, value=1)
 
 movie = st.text_input('Escriba Id de la pelicula, Ej: ns405, ds693, as288, hs789')
-titulo = title.title[movie]
-st.write('Ha elegido la pelicula', titulo)
+
+st.write('Ha elegido la pelicula', movie)
 
 scoring = st.slider('Especifique la calificacion esperada', 1, 5, 3)
 st.write('Puntuacion esperada:', scoring)
