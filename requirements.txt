@@ -2,4 +2,4 @@ pandas
 surprise
 
 streamlit
-pickle
+pickle > 0
