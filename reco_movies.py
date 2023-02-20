@@ -17,7 +17,7 @@ svd = pickle.load(open('reco_movies.json', 'rb'))
 def recommendation(user, movie, scoring):
 
     # Cargando tabla
-    rating = pd.read_parquet('https://github.com/Gustgv/Recomendacion-de-peliculas/blob/master/rating_data.parquet?raw=true')
+    rating = pd.read_parquet('https://github.com/Gustgv/Primer-Proyecto-ML/blob/master/deploy_data.parquet?raw=true')
 
     all_movie = rating[['id', 'title']].drop_duplicates().set_index('id').iloc[:22998].copy()
     
