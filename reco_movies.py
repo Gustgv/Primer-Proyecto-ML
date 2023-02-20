@@ -4,7 +4,9 @@ from surprise import SVD
 import pickle
 import streamlit as st
 
-
+# Cargando tabla
+rating = pd.read_parquet('https://github.com/Gustgv/Primer-Proyecto-ML/blob/master/deploy_data.parquet?raw=true')
+    
 #Cargando Modelo
 svd = pickle.load(open('reco_movie.json', 'rb'))
 
@@ -16,8 +18,7 @@ svd = pickle.load(open('reco_movie.json', 'rb'))
 
 def recommendation(user, movie, scoring):
 
-    # Cargando tabla
-    rating = pd.read_parquet('https://github.com/Gustgv/Primer-Proyecto-ML/blob/master/deploy_data.parquet?raw=true')
+    
 
     all_movie = rating[['id', 'title']].drop_duplicates().set_index('id').iloc[:22998].copy()
     
@@ -48,9 +49,9 @@ st.header('Por favor ingrese nro de usuario e id de la pelicula:')
 user = st.number_input('Id de Usuario (Maximo 124380):', min_value=1, max_value=124380, value=1)
 
 movie = st.text_input('Escriba Id de la pelicula, Ej: ns405, ds693, as288, hs789')
-st.write('El titulo de la pelicula es', title[title.id == movie].iloc[0,1])
+st.write('Ha elegido el codigo', movie)
 
-scoring = st.slider('Especifique la calificacion esperada', 1, 5, 1)
+scoring = st.slider('Especifique la calificacion esperada', 1, 5, 3)
 st.write('Puntuacion esperada:', scoring)
 
 
