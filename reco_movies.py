@@ -47,7 +47,8 @@ st.header('Por favor ingrese nro de usuario e id de la pelicula:')
 user = st.number_input('Id de Usuario (Maximo 124380):', min_value=1, max_value=124380, value=1)
 
 movie = st.text_input('Escriba Id de la pelicula, Ej: ns405, ds693, as288, hs789')
-st.write('Ha elegido la pelicula', rating[['title']][rating['id'] == movie].iloc[0,0])
+titulo = rating[['title']][rating['id'] == movie].iloc[0,0]
+st.write('Ha elegido la pelicula', titulo)
 
 scoring = st.slider('Especifique la calificacion esperada', 1, 5, 3)
 st.write('Puntuacion esperada:', scoring)
