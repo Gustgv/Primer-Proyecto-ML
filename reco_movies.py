@@ -55,4 +55,4 @@ st.write('Puntuacion esperada:', scoring)
 
 
 if st.button('Recomendar'):
-    st.success(recommendation(user, movie, scoring))
+    st.success(print(recommendation(user, movie, scoring)))
